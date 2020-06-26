@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Component
@@ -24,7 +25,7 @@ public class MailService {
         UUID mailUUID = UUID.randomUUID();
         Mail mail = new Mail(mailUUID,
                 createMailRequest.sender(),
-                createMailRequest.recipients(),
+                new ArrayList<>(createMailRequest.recipients()),
                 createMailRequest.content(),
                 MailStatus.PENDING);
         mailRepository.save(mail);
@@ -36,5 +37,11 @@ public class MailService {
                 .findByUuid(mailUUID)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
                 .getStatus();
+    }
+
+    public Mail get(UUID mailUUID) {
+        return mailRepository
+                .findByUuid(mailUUID)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

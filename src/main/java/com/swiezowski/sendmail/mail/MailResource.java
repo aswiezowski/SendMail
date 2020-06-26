@@ -1,6 +1,7 @@
 package com.swiezowski.sendmail.mail;
 
 import com.swiezowski.sendmail.mail.dto.*;
+import com.swiezowski.sendmail.mail.entities.Mail;
 import com.swiezowski.sendmail.mail.entities.MailStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +32,24 @@ public class MailResource {
         MailStatus status = mailService.getStatus(mailUUID);
 
         return ImmutableGetStatusResponse.builder()
-                .status(MailStatusDto.valueOf(status.name()))
+                .status(mapMailStatusToDto(status))
                 .build();
+    }
+
+    @GetMapping(path = "{mailUUID}")
+    public GetMailResponse get(@PathVariable("mailUUID") UUID mailUUID){
+        Mail mail = mailService.get(mailUUID);
+
+        return ImmutableGetMailResponse.builder()
+                .sender(mail.getSender())
+                .recipients(mail.getRecipients())
+                .content(mail.getContent())
+                .status(mapMailStatusToDto(mail.getStatus()))
+                .build();
+    }
+
+    private MailStatusDto mapMailStatusToDto(MailStatus status) {
+        return MailStatusDto.valueOf(status.name());
     }
 
 }

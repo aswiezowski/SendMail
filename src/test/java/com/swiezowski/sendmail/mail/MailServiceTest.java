@@ -53,4 +53,27 @@ class MailServiceTest {
 
         assertEquals(MailStatus.SENT, status);
     }
+
+    @Test
+    void getMailThrowsExceptionWhenUUIDNotFound(){
+        MailRepository repository = Mockito.mock(MailRepository.class);
+        MailService service = new MailService(repository);
+        UUID notExistentUUID = UUID.fromString("9bb92b49-c21c-4682-8a8c-d4ed7081ffac");
+
+        assertThrows(ResponseStatusException.class, () -> service.get(notExistentUUID));
+    }
+
+    @Test
+    void getMailReturnsMail(){
+        MailRepository repository = Mockito.mock(MailRepository.class);
+        MailService service = new MailService(repository);
+        Mail expectedMail = mock(Mail.class);
+        UUID mailUUID = UUID.fromString("9bb92b49-c21c-4682-8a8c-d4ed7081ffac");
+        when(repository.findByUuid(mailUUID)).thenReturn(Optional.of(expectedMail));
+
+
+        Mail mail = service.get(mailUUID);
+
+        assertEquals(expectedMail, mail);
+    }
 }
