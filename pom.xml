@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.swiezowski</groupId>
-	<artifactId>senndmail</artifactId>
+	<artifactId>sendmail</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>senndmail</name>
+	<name>sendmail</name>
 	<description>Coding task for send mail</description>
 
 	<properties>
@@ -47,6 +47,12 @@
 					<artifactId>junit-vintage-engine</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.immutables</groupId>
+			<artifactId>value</artifactId>
+			<version>2.8.2</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
