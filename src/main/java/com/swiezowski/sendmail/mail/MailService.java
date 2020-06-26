@@ -4,7 +4,9 @@ import com.swiezowski.sendmail.mail.dto.CreateMailRequest;
 import com.swiezowski.sendmail.mail.entities.Mail;
 import com.swiezowski.sendmail.mail.entities.MailStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -27,5 +29,12 @@ public class MailService {
                 MailStatus.PENDING);
         mailRepository.save(mail);
         return mailUUID;
+    }
+
+    public MailStatus getStatus(UUID mailUUID){
+        return mailRepository
+                .findByUuid(mailUUID)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
+                .getStatus();
     }
 }
