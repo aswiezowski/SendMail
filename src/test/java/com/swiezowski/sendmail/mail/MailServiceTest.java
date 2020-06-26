@@ -6,12 +6,15 @@ import com.swiezowski.sendmail.mail.entities.Mail;
 import com.swiezowski.sendmail.mail.entities.MailStatus;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -75,5 +78,17 @@ class MailServiceTest {
         Mail mail = service.get(mailUUID);
 
         assertEquals(expectedMail, mail);
+    }
+
+    @Test
+    void getAllMailsReturnsPage(){
+        MailRepository repository = Mockito.mock(MailRepository.class);
+        MailService service = new MailService(repository);
+        Page page = mock(Page.class);
+        when(repository.findAll(any(Pageable.class))).thenReturn(page);
+
+        Page<Mail> pagedMails = service.getAll(Pageable.unpaged());
+
+        assertNotNull(pagedMails);
     }
 }

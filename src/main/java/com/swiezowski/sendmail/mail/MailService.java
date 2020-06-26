@@ -4,6 +4,8 @@ import com.swiezowski.sendmail.mail.dto.CreateMailRequest;
 import com.swiezowski.sendmail.mail.entities.Mail;
 import com.swiezowski.sendmail.mail.entities.MailStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -43,5 +45,9 @@ public class MailService {
         return mailRepository
                 .findByUuid(mailUUID)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    public Page<Mail> getAll(Pageable pageable){
+        return mailRepository.findAll(pageable);
     }
 }
