@@ -18,6 +18,7 @@ public abstract class GetMailResponse {
     public abstract String sender();
     public abstract Set<String> recipients();
     public abstract String content();
+    public abstract String subject();
     public abstract MailStatusDto status();
 
 }

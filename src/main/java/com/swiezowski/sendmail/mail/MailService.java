@@ -36,6 +36,7 @@ public class MailService {
                 createMailRequest.sender(),
                 new ArrayList<>(createMailRequest.recipients()),
                 createMailRequest.content(),
+                createMailRequest.subject(),
                 MailStatus.PENDING);
         mailRepository.save(mail);
         return mailUUID;

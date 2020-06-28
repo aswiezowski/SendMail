@@ -31,6 +31,7 @@ public class SendEmailService {
         simpleMail.setFrom(mail.getSender());
         simpleMail.setTo(mail.getRecipients().toArray(new String[0]));
         simpleMail.setText(mail.getContent());
+        simpleMail.setSubject(mail.getSubject());
         return simpleMail;
     }
 }

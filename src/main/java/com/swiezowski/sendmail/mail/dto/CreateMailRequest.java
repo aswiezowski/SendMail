@@ -14,5 +14,6 @@ public abstract class CreateMailRequest {
     public abstract String sender();
     public abstract Set<String> recipients();
     public abstract String content();
+    public abstract String subject();
 
 }

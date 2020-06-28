@@ -65,6 +65,7 @@ public class MailResource {
                 .sender(mail.getSender())
                 .recipients(mail.getRecipients())
                 .content(mail.getContent())
+                .subject(mail.getSubject())
                 .status(mapMailStatusToDto(mail.getStatus()))
                 .build();
     }
