@@ -8,4 +8,9 @@ public enum MailStatusDto {
     PENDING,
     @JsonProperty("sent")
     SENT;
+
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
 }

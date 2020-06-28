@@ -14,23 +14,22 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("mail")
+@RequestMapping("mails")
 public class MailResource {
 
     private MailService mailService;
     private PagedResourcesAssembler<GetMailResponse> pagedResourcesAssembler;
 
     @Autowired
-    public MailResource(MailService mailService, PagedResourcesAssembler<GetMailResponse> pagedResourcesAssembler){
+    public MailResource(MailService mailService, PagedResourcesAssembler<GetMailResponse> pagedResourcesAssembler) {
         this.mailService = mailService;
         this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
     @PostMapping
-    public CreateMailResponse create(@RequestBody CreateMailRequest mailRequest){
+    public CreateMailResponse create(@RequestBody CreateMailRequest mailRequest) {
         UUID mailUUID = mailService.createMail(mailRequest);
         return ImmutableCreateMailResponse.builder()
                 .uuid(mailUUID)
@@ -38,7 +37,7 @@ public class MailResource {
     }
 
     @GetMapping(path = "{mailUUID}/status")
-    public GetStatusResponse getStatus(@PathVariable("mailUUID") UUID mailUUID){
+    public GetStatusResponse getStatus(@PathVariable("mailUUID") UUID mailUUID) {
         MailStatus status = mailService.getStatus(mailUUID);
 
         return ImmutableGetStatusResponse.builder()
@@ -47,14 +46,14 @@ public class MailResource {
     }
 
     @GetMapping(path = "{mailUUID}")
-    public GetMailResponse get(@PathVariable("mailUUID") UUID mailUUID){
+    public GetMailResponse get(@PathVariable("mailUUID") UUID mailUUID) {
         Mail mail = mailService.get(mailUUID);
 
         return mapToGetMailResponse(mail);
     }
 
     @GetMapping
-    public PagedModel<EntityModel<GetMailResponse>> getAll(@NotNull Pageable pageable){
+    public PagedModel<EntityModel<GetMailResponse>> getAll(@NotNull Pageable pageable) {
         Page<Mail> mailEntities = mailService.getAll(pageable);
         Page<GetMailResponse> mailsResponse = mailEntities.map(this::mapToGetMailResponse);
         return pagedResourcesAssembler.toModel(mailsResponse);
@@ -74,4 +73,14 @@ public class MailResource {
         return MailStatusDto.valueOf(status.name());
     }
 
+
+    @PatchMapping
+    public PatchMailResponse patchMail(@RequestParam(name = "status") MailStatusDto status,
+                                       @RequestBody PatchMailRequest patchMailRequest) {
+        Set<UUID> changedMailsUUIDs = mailService.patchMail(status, patchMailRequest);
+
+        return ImmutablePatchMailResponse.builder()
+                .uuids(changedMailsUUIDs)
+                .build();
+    }
 }
