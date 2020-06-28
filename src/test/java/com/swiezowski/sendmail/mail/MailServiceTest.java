@@ -31,6 +31,7 @@ class MailServiceTest {
         CreateMailRequest createMailRequest = ImmutableCreateMailRequest.builder()
                 .sender("me@example.com")
                 .content("content")
+                .subject("test subject")
                 .build();
 
         UUID mailUUID = service.createMail(createMailRequest);
